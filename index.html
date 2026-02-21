@@ -1,181 +1,888 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IVELLE India | Western Wear</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVELLE | Wear Your Mood</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons (Reliable icon library) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-body{
-  margin:0;
-  font-family:'Outfit',sans-serif;
-  background:#fafafa;
-}
+    <!-- Tailwind Config & Custom CSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-pink': '#FFC0CB',
+                        'brand-lavender': '#E6E6FA',
+                        'brand-beige': '#F5F5DC',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
-h1,h2,h3{
-  font-family:'Syne',sans-serif;
-}
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #1A1A1A;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 8%;
-  background:white;
-  position:sticky;
-  top:0;
-  box-shadow:0 2px 10px rgba(0,0,0,0.05);
-}
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
-.logo{
-  font-size:28px;
-  font-weight:800;
-}
+        /* Marquee Animation */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
 
-nav a{
-  margin:0 15px;
-  text-decoration:none;
-  color:black;
-  font-weight:500;
-}
+        /* View Transitions */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .view-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.hero{
-  height:90vh;
-  background:url('https://images.unsplash.com/photo-1520975918318-7f7b1b3f8b0e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:white;
-}
+        /* Cart Overlay */
+        #cart-sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+        }
+        #cart-sidebar.open {
+            transform: translateX(0);
+        }
+        #cart-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+        }
+        #cart-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-.hero h1{
-  font-size:70px;
-  margin:0;
-}
+        /* Mobile Menu */
+        #mobile-menu {
+            display: none;
+        }
+        #mobile-menu.open {
+            display: flex;
+        }
 
-.hero span{
-  color:#ff9ad5;
-}
-
-.btn{
-  padding:12px 30px;
-  background:white;
-  color:black;
-  border-radius:30px;
-  text-decoration:none;
-  font-weight:600;
-  display:inline-block;
-  margin-top:20px;
-}
-
-.section{
-  padding:80px 8%;
-}
-
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:30px;
-}
-
-.card{
-  background:white;
-  border-radius:15px;
-  overflow:hidden;
-  box-shadow:0 5px 20px rgba(0,0,0,0.05);
-  transition:0.3s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-}
-
-.card img{
-  width:100%;
-  height:300px;
-  object-fit:cover;
-}
-
-.card-content{
-  padding:15px;
-}
-
-.price{
-  font-weight:600;
-  color:#ff2d95;
-}
-
-footer{
-  background:#111;
-  color:white;
-  text-align:center;
-  padding:30px;
-  margin-top:50px;
-}
-
-.india-bar{
-  background:black;
-  color:white;
-  text-align:center;
-  padding:8px;
-  font-size:14px;
-}
-</style>
+        /* Blob Animation for Newsletter */
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-blob {
+            animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+            animation-delay: 2s;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col relative selection:bg-pink-200 selection:text-pink-900">
 
-<div class="india-bar">
-🇮🇳 Free Shipping Across India | COD Available | Use code IVELLE10 for 10% Off
-</div>
+    <!-- Top Promo Bar -->
+    <div class="bg-black text-white text-[10px] md:text-sm font-medium py-2 text-center uppercase tracking-widest font-syne">
+        ✨ Free shipping on prepaid orders | Extra 10% off on UPI ✨
+    </div>
 
-<header>
-<div class="logo">IVELLE</div>
-<nav>
-<a href="#">Home</a>
-<a href="#">Shop</a>
-<a href="#">About</a>
-<a href="#">Contact</a>
-</nav>
-</header>
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center lg:hidden">
+                    <button onclick="toggleMobileMenu()" class="p-2 -ml-2 text-gray-800">
+                        <i class="ph ph-list text-2xl" id="menu-icon"></i>
+                    </button>
+                </div>
 
-<section class="hero">
-<div>
-<h1>WEAR <span>YOUR</span> MOOD</h1>
-<p>Trendy Western Wear for India's Main Characters ✨</p>
-<a href="#" class="btn">Shop Now</a>
-</div>
-</section>
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex space-x-8 items-center">
+                    <button onclick="navigateTo('home')" class="nav-link text-sm font-medium hover:text-pink-500 transition-colors" data-target="home">Home</button>
+                    <button onclick="navigateTo('shop')" class="nav-link text-sm font-medium hover:text-pink-500 transition-colors" data-target="shop">Shop All</button>
+                    <button onclick="navigateTo('about')" class="nav-link text-sm font-medium hover:text-pink-500 transition-colors" data-target="about">Our Vibe</button>
+                    <button onclick="navigateTo('contact')" class="nav-link text-sm font-medium hover:text-pink-500 transition-colors" data-target="contact">Holla</button>
+                </nav>
 
-<section class="section">
-<h2>Trending Now 🔥</h2>
-<div class="products">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center justify-center cursor-pointer absolute left-1/2 transform -translate-x-1/2" onclick="navigateTo('home')">
+                    <h1 class="font-syne font-bold text-3xl md:text-4xl tracking-tighter">IVELLE</h1>
+                </div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1520975918318-7f7b1b3f8b0e?auto=format&fit=crop&w=800&q=80">
-<div class="card-content">
-<h3>Midnight Satin Slip</h3>
-<p class="price">₹4,999</p>
-</div>
-</div>
+                <!-- Right Icons -->
+                <div class="flex items-center space-x-4 md:space-x-6">
+                    <button class="text-gray-800 hover:text-pink-500 transition-colors hidden sm:block">
+                        <i class="ph ph-magnifying-glass text-xl"></i>
+                    </button>
+                    <button class="text-gray-800 hover:text-pink-500 transition-colors relative" onclick="navigateTo('shop')">
+                        <i class="ph ph-heart text-xl"></i>
+                        <span id="wishlist-badge" class="hidden absolute -top-1.5 -right-1.5 bg-pink-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button class="text-gray-800 hover:text-pink-500 transition-colors relative" onclick="toggleCart()">
+                        <i class="ph ph-shopping-bag text-xl"></i>
+                        <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-black text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=80">
-<div class="card-content">
-<h3>Butterfly Effect Crop</h3>
-<p class="price">₹1,899</p>
-</div>
-</div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="absolute top-20 left-0 w-full bg-white border-b border-gray-100 shadow-xl py-4 px-4 flex-col space-y-4 font-syne text-xl z-50">
+            <button onclick="navigateTo('home')" class="text-left py-2 border-b border-gray-50">Home</button>
+            <button onclick="navigateTo('shop')" class="text-left py-2 border-b border-gray-50">Shop All</button>
+            <button onclick="navigateTo('about')" class="text-left py-2 border-b border-gray-50">Our Vibe</button>
+            <button onclick="navigateTo('contact')" class="text-left py-2">Holla At Us</button>
+        </div>
+    </header>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80">
-<div class="card-content">
-<h3>Picnic Date Floral</h3>
-<p class="price">₹3,799</p>
-</div>
-</div>
+    <!-- Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col">
+        <div class="flex justify-between items-center p-6 border-b border-gray-100">
+            <h2 class="font-syne text-2xl font-bold">Your Bag 🛍️</h2>
+            <button onclick="toggleCart()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Cart Items Container -->
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-6">
+            <!-- Items injected by JS -->
+        </div>
 
-<div class="card">
-<img src="https://images.unsplash
+        <!-- Cart Footer -->
+        <div id="cart-footer" class="border-t border-gray-100 p-6 bg-gray-50 hidden">
+            <div class="flex justify-between mb-4 font-syne font-semibold text-lg">
+                <span>Subtotal</span>
+                <span id="cart-total">₹0</span>
+            </div>
+            <p class="text-xs text-gray-500 mb-4 text-center">Taxes included. Free shipping on prepaid orders.</p>
+            <button class="w-full bg-black text-white py-4 rounded-full font-syne font-bold text-lg hover:bg-pink-500 transition-all hover:-translate-y-1">
+                Checkout Now
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col w-full" id="main-content">
+        
+        <!-- ==================== HOME VIEW ==================== -->
+        <div id="view-home" class="view-section active w-full">
+            <!-- Hero Section -->
+            <section class="relative h-[80vh] w-full flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 z-0 bg-black">
+                    <img 
+                        src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2000&auto=format&fit=crop" 
+                        alt="" 
+                        class="w-full h-full object-cover object-top opacity-70"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                </div>
+                
+                <div class="relative z-10 text-center px-4 max-w-4xl mx-auto flex flex-col items-center mt-20">
+                    <span class="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block transform -rotate-2">
+                        New Drop
+                    </span>
+                    <h1 class="font-syne text-6xl md:text-8xl lg:text-9xl font-extrabold text-white leading-none tracking-tighter mb-6 drop-shadow-xl">
+                        WEAR <br/><span class="text-pink-300 italic">YOUR</span> MOOD
+                    </h1>
+                    <p class="text-white/90 text-lg md:text-xl font-medium mb-8 max-w-lg">
+                        Unapologetic, quirky, and strictly for the main characters. 💅✨
+                    </p>
+                    <button 
+                        onclick="navigateTo('shop')"
+                        class="bg-white text-black font-syne font-bold text-lg px-8 py-4 rounded-full hover:bg-pink-500 hover:text-white transition-all transform hover:scale-105 shadow-xl flex items-center gap-2 group"
+                    >
+                        Shop The Collection <i class="ph ph-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Marquee -->
+            <div class="bg-pink-200 py-3 border-y border-pink-300 marquee-container flex">
+                <div class="marquee-content flex gap-8 text-pink-900 font-syne font-bold text-xl uppercase tracking-widest">
+                    <span>✨ 100% THAT BRAND ✨</span>
+                    <span>FREE SHIPPING ON PREPAID ✨</span>
+                    <span>RESTOCK ALERT 🚨</span>
+                    <span>✨ 100% THAT BRAND ✨</span>
+                    <span>FREE SHIPPING ON PREPAID ✨</span>
+                    <span>RESTOCK ALERT 🚨</span>
+                    <span>✨ 100% THAT BRAND ✨</span>
+                    <span>FREE SHIPPING ON PREPAID ✨</span>
+                    <span>RESTOCK ALERT 🚨</span>
+                </div>
+            </div>
+
+            <!-- Featured Categories -->
+            <section class="py-20 px-4 max-w-7xl mx-auto">
+                <div class="flex justify-between items-end mb-10">
+                    <h2 class="font-syne text-4xl md:text-5xl font-bold">Shop by Vibe</h2>
+                    <button onclick="navigateTo('shop')" class="hidden md:flex items-center text-sm font-bold uppercase tracking-wider hover:text-pink-500 transition-colors">
+                        View All <i class="ph ph-arrow-right ml-1"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <div onclick="navigateTo('shop')" class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer bg-pink-100 p-4 flex flex-col justify-end">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop" alt="Co-ords" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-110 transition-transform duration-700" />
+                        <div class="relative z-10 bg-white/90 backdrop-blur rounded-xl p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <h3 class="font-syne font-bold text-lg">Co-ords</h3>
+                        </div>
+                    </div>
+                    <div onclick="navigateTo('shop')" class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer bg-purple-100 p-4 flex flex-col justify-end">
+                        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800&auto=format&fit=crop" alt="Y2K Tops" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-110 transition-transform duration-700" />
+                        <div class="relative z-10 bg-white/90 backdrop-blur rounded-xl p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <h3 class="font-syne font-bold text-lg">Y2K Tops</h3>
+                        </div>
+                    </div>
+                    <div onclick="navigateTo('shop')" class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer bg-orange-100 p-4 flex flex-col justify-end">
+                        <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop" alt="Oversized" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-110 transition-transform duration-700" />
+                        <div class="relative z-10 bg-white/90 backdrop-blur rounded-xl p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <h3 class="font-syne font-bold text-lg">Oversized</h3>
+                        </div>
+                    </div>
+                    <div onclick="navigateTo('shop')" class="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer bg-blue-100 p-4 flex flex-col justify-end">
+                        <img src="https://images.unsplash.com/photo-1566206091558-4ec92740afd0?q=80&w=800&auto=format&fit=crop" alt="Dresses" class="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-80 group-hover:scale-110 transition-transform duration-700" />
+                        <div class="relative z-10 bg-white/90 backdrop-blur rounded-xl p-4 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                            <h3 class="font-syne font-bold text-lg">Dresses</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trending Now (Injected by JS) -->
+            <section class="py-20 bg-gray-900 text-white">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-12">
+                        <h2 class="font-syne text-4xl md:text-5xl font-bold mb-4 text-pink-300">Trending Right Now 🔥</h2>
+                        <p class="text-gray-400">Add to cart before they go viral and sell out again.</p>
+                    </div>
+                    <div id="trending-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Instagram Feed -->
+            <section class="py-20 px-4 max-w-7xl mx-auto overflow-hidden">
+                <div class="text-center mb-10">
+                    <h2 class="font-syne text-4xl font-bold mb-2">As Seen On You</h2>
+                    <p class="text-gray-500">Tag <span class="font-bold text-pink-500">@ShopIvelle</span> to be featured</p>
+                </div>
+                <div class="flex gap-4 overflow-x-auto pb-8 hide-scrollbar snap-x">
+                    <div class="min-w-[250px] md:min-w-[300px] aspect-square relative rounded-xl overflow-hidden group snap-center cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1516575334481-f85287c2c82d?q=80&w=400&auto=format&fit=crop" alt="IG Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="ph ph-instagram-logo text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <div class="min-w-[250px] md:min-w-[300px] aspect-square relative rounded-xl overflow-hidden group snap-center cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1550614000-4b95d4662247?q=80&w=400&auto=format&fit=crop" alt="IG Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="ph ph-instagram-logo text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <div class="min-w-[250px] md:min-w-[300px] aspect-square relative rounded-xl overflow-hidden group snap-center cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=400&auto=format&fit=crop" alt="IG Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="ph ph-instagram-logo text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <div class="min-w-[250px] md:min-w-[300px] aspect-square relative rounded-xl overflow-hidden group snap-center cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=400&auto=format&fit=crop" alt="IG Post" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <i class="ph ph-instagram-logo text-white text-4xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Newsletter -->
+            <section class="py-24 bg-pink-100 relative overflow-hidden">
+                <div class="absolute -top-24 -left-24 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+                <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+                
+                <div class="max-w-2xl mx-auto px-4 text-center relative z-10">
+                    <h2 class="font-syne text-5xl font-extrabold mb-4 text-pink-900 tracking-tighter">Let's be BFFs 💌</h2>
+                    <p class="text-pink-800/80 mb-8 text-lg">Drop your email for 15% off your first order, exclusive drops, and zero spam (we promise).</p>
+                    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); alert('Subscribed! ✨');">
+                        <input 
+                            type="email" 
+                            placeholder="Enter your email" 
+                            class="flex-1 px-6 py-4 rounded-full border-2 border-pink-200 focus:outline-none focus:border-pink-500 bg-white/80 backdrop-blur font-medium"
+                            required
+                        />
+                        <button type="submit" class="bg-pink-600 text-white font-syne font-bold px-8 py-4 rounded-full hover:bg-black transition-colors whitespace-nowrap">
+                            I'm In ✨
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== SHOP VIEW ==================== -->
+        <div id="view-shop" class="view-section w-full max-w-7xl mx-auto px-4 py-8 md:py-12">
+            <div class="text-center mb-12">
+                <h1 class="font-syne text-5xl md:text-6xl font-extrabold mb-4">Shop Everything</h1>
+                <p class="text-gray-500 max-w-xl mx-auto">From cute brunch fits for Sunday to main-character night out dresses. We got you.</p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Desktop Filters -->
+                <div class="hidden lg:block w-64 flex-shrink-0 space-y-8 sticky top-28 h-fit">
+                    <div>
+                        <h3 class="font-syne font-bold text-lg mb-4 border-b pb-2">Category</h3>
+                        <ul class="space-y-3">
+                            <li><label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" checked class="w-4 h-4 text-pink-500 accent-pink-500"><span class="text-gray-600 group-hover:text-black">All</span></label></li>
+                            <li><label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="w-4 h-4 text-pink-500 accent-pink-500"><span class="text-gray-600 group-hover:text-black">Co-ord Sets</span></label></li>
+                            <li><label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="w-4 h-4 text-pink-500 accent-pink-500"><span class="text-gray-600 group-hover:text-black">Crop Tops</span></label></li>
+                            <li><label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="w-4 h-4 text-pink-500 accent-pink-500"><span class="text-gray-600 group-hover:text-black">Oversized Tees</span></label></li>
+                            <li><label class="flex items-center gap-3 cursor-pointer group"><input type="checkbox" class="w-4 h-4 text-pink-500 accent-pink-500"><span class="text-gray-600 group-hover:text-black">Dresses</span></label></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Product Grid (Injected by JS) -->
+                <div id="shop-grid" class="flex-1 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10 md:gap-x-8 md:gap-y-12">
+                    <!-- Products injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PRODUCT VIEW ==================== -->
+        <div id="view-product" class="view-section w-full max-w-7xl mx-auto px-4 py-8">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center gap-2 text-sm text-gray-500 mb-8 font-medium">
+                <button onclick="navigateTo('home')" class="hover:text-pink-500">Home</button>
+                <span>/</span>
+                <button onclick="navigateTo('shop')" class="hover:text-pink-500">Shop</button>
+                <span>/</span>
+                <span class="text-black" id="prod-bc-category">Category</span>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-10 lg:gap-16">
+                <!-- Images -->
+                <div class="w-full md:w-1/2 lg:w-3/5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="aspect-[3/4] md:col-span-2 rounded-2xl overflow-hidden bg-gray-100 group relative">
+                            <img id="prod-main-img" src="" alt="" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-150 transform origin-center cursor-crosshair" />
+                            <div class="absolute top-4 left-4 flex flex-col gap-2" id="prod-badges"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="w-full md:w-1/2 lg:w-2/5 flex flex-col sticky top-28 h-fit">
+                    <div class="mb-6">
+                        <h1 id="prod-name" class="font-syne text-3xl md:text-4xl lg:text-5xl font-extrabold mb-3 leading-tight tracking-tight">Name</h1>
+                        <div class="flex items-center gap-4 mb-4">
+                            <span id="prod-price" class="text-2xl font-medium">₹0</span>
+                            <div id="prod-rating" class="flex items-center gap-1 text-sm bg-yellow-50 text-yellow-700 px-2 py-1 rounded-full font-medium">
+                                <i class="ph-fill ph-star text-yellow-500"></i> <span id="prod-rating-text"></span>
+                            </div>
+                        </div>
+                        <p id="prod-desc" class="text-gray-600 leading-relaxed text-lg">Description</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="font-syne font-bold text-sm uppercase tracking-wider mb-3">Color</h3>
+                        <div id="prod-colors" class="flex gap-3"></div>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-syne font-bold text-sm uppercase tracking-wider">Size</h3>
+                            <button class="text-sm text-gray-500 underline flex items-center gap-1 hover:text-pink-500">
+                                <i class="ph ph-ruler"></i> Size Guide
+                            </button>
+                        </div>
+                        <div id="prod-sizes" class="grid grid-cols-4 gap-3"></div>
+                    </div>
+
+                    <div class="flex gap-4 mb-8">
+                        <button id="btn-add-cart" class="flex-1 bg-pink-500 text-white font-syne font-bold text-lg py-4 rounded-full hover:bg-black transition-all transform active:scale-95 shadow-lg shadow-pink-200">
+                            Add To Bag
+                        </button>
+                        <button id="btn-wishlist-detail" class="w-16 h-16 rounded-full border border-gray-200 flex items-center justify-center hover:bg-pink-50 transition-colors flex-shrink-0">
+                            <i class="ph ph-heart text-2xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="border-t border-gray-200 divide-y divide-gray-200">
+                        <div class="py-4">
+                            <button class="w-full flex justify-between items-center font-syne font-bold text-lg">
+                                Details & Care <i class="ph ph-plus"></i>
+                            </button>
+                        </div>
+                        <div class="py-4">
+                            <button class="w-full flex justify-between items-center font-syne font-bold text-lg">
+                                Shipping & Returns <i class="ph ph-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ABOUT VIEW ==================== -->
+        <div id="view-about" class="view-section w-full">
+            <div class="bg-pink-50 py-20 md:py-32 px-4 text-center">
+                <h1 class="font-syne text-6xl md:text-8xl font-extrabold text-pink-900 tracking-tighter mb-6">
+                    WE ARE IVELLE.
+                </h1>
+                <p class="max-w-2xl mx-auto text-xl md:text-2xl text-pink-800 leading-relaxed font-medium">
+                    Born on the internet, made for the streets. We exist to empower your main character moments.
+                </p>
+            </div>
+            
+            <div class="max-w-5xl mx-auto px-4 py-20 flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1529139574466-a303027c028b?q=80&w=800&auto=format&fit=crop" alt="About us" class="rounded-3xl shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500" />
+                </div>
+                <div class="w-full md:w-1/2 space-y-6">
+                    <h2 class="font-syne text-4xl font-bold">Not Just Another Clothing Brand</h2>
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        Ivelle started in a messy college dorm room with a sewing machine and a dream to create clothes that actually look like our Pinterest boards and fit the Indian Gen-Z vibe. 
+                    </p>
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        We're obsessed with bold colors, quirky silhouettes, and the idea that getting dressed should be the most fun part of your day. Fashion isn't a uniform; it's a mood board of who you are.
+                    </p>
+                    <ul class="space-y-3 pt-4 font-medium">
+                        <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-pink-500 text-xl"></i> Ethically produced in small batches</li>
+                        <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-pink-500 text-xl"></i> Inclusive sizing (because duh)</li>
+                        <li class="flex items-center gap-3"><i class="ph-fill ph-check-circle text-pink-500 text-xl"></i> Female founded & led in India</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONTACT VIEW ==================== -->
+        <div id="view-contact" class="view-section w-full max-w-7xl mx-auto px-4 py-16 md:py-24">
+            <div class="flex flex-col md:flex-row gap-16">
+                <div class="w-full md:w-5/12">
+                    <h1 class="font-syne text-5xl md:text-6xl font-extrabold mb-6">Holla At Us 📱</h1>
+                    <p class="text-gray-600 text-lg mb-10">Got a question about an order? Wanna collab? Just want to tell us we're pretty? Drop us a line.</p>
+                    
+                    <div class="space-y-6 font-medium">
+                        <div>
+                            <h3 class="text-sm text-gray-400 uppercase tracking-wider mb-1">Email</h3>
+                            <p class="text-xl hover:text-pink-500 transition-colors cursor-pointer">hello@shopivelle.in</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm text-gray-400 uppercase tracking-wider mb-1">DM Us</h3>
+                            <p class="text-xl hover:text-pink-500 transition-colors cursor-pointer">@ShopIvelle</p>
+                        </div>
+                        <div class="pt-8">
+                            <h3 class="font-syne text-2xl font-bold mb-4">Follow The Vibe</h3>
+                            <div class="flex gap-4">
+                                <a href="#" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center hover:bg-pink-500 transition-colors transform hover:-translate-y-1"><i class="ph-fill ph-instagram-logo text-2xl"></i></a>
+                                <a href="#" class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center hover:bg-pink-500 transition-colors transform hover:-translate-y-1"><i class="ph-fill ph-twitter-logo text-2xl"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-7/12 bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-pink-100 rounded-bl-full -z-10"></div>
+                    <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message sent!');">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold uppercase tracking-wider text-gray-600">First Name</label>
+                                <input type="text" class="w-full border-b-2 border-gray-200 py-3 focus:outline-none focus:border-pink-500 bg-transparent transition-colors" placeholder="Ananya" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold uppercase tracking-wider text-gray-600">Last Name</label>
+                                <input type="text" class="w-full border-b-2 border-gray-200 py-3 focus:outline-none focus:border-pink-500 bg-transparent transition-colors" placeholder="Sharma" />
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold uppercase tracking-wider text-gray-600">Email</label>
+                            <input type="email" class="w-full border-b-2 border-gray-200 py-3 focus:outline-none focus:border-pink-500 bg-transparent transition-colors" placeholder="you@example.in" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold uppercase tracking-wider text-gray-600">Order Number (Optional)</label>
+                            <input type="text" class="w-full border-b-2 border-gray-200 py-3 focus:outline-none focus:border-pink-500 bg-transparent transition-colors" placeholder="#IVL12345" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold uppercase tracking-wider text-gray-600">What's Up?</label>
+                            <textarea rows="4" class="w-full border-2 border-gray-200 rounded-xl p-4 focus:outline-none focus:border-pink-500 bg-transparent transition-colors resize-none" placeholder="Spill the tea..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-black text-white font-syne font-bold text-lg py-4 rounded-full hover:bg-pink-500 transition-colors">
+                            Send It 💌
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="md:col-span-1">
+                <h2 class="font-syne font-extrabold text-3xl mb-4 tracking-tighter cursor-pointer" onclick="navigateTo('home')">IVELLE</h2>
+                <p class="text-gray-500 text-sm mb-6">Wear your mood. Unapologetic western wear designed for the Gen-Z of India.</p>
+                <div class="flex gap-4 text-gray-400">
+                    <a href="#" class="hover:text-pink-500 transition-colors"><i class="ph-fill ph-instagram-logo text-2xl"></i></a>
+                    <a href="#" class="hover:text-pink-500 transition-colors"><i class="ph-fill ph-facebook-logo text-2xl"></i></a>
+                    <a href="#" class="hover:text-pink-500 transition-colors"><i class="ph-fill ph-twitter-logo text-2xl"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="font-syne font-bold text-lg mb-4">Shop</h4>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><button onclick="navigateTo('shop')" class="hover:text-pink-500 transition-colors">New Arrivals</button></li>
+                    <li><button onclick="navigateTo('shop')" class="hover:text-pink-500 transition-colors">Best Sellers</button></li>
+                    <li><button onclick="navigateTo('shop')" class="hover:text-pink-500 transition-colors">Co-ords</button></li>
+                    <li><button onclick="navigateTo('shop')" class="hover:text-pink-500 transition-colors">Dresses</button></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-syne font-bold text-lg mb-4">Help</h4>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><a href="#" class="hover:text-pink-500 transition-colors">FAQ</a></li>
+                    <li><a href="#" class="hover:text-pink-500 transition-colors">Shipping & Returns</a></li>
+                    <li><a href="#" class="hover:text-pink-500 transition-colors">Track Order</a></li>
+                    <li><button onclick="navigateTo('contact')" class="hover:text-pink-500 transition-colors">Contact Us</button></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-syne font-bold text-lg mb-4">Legal</h4>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><a href="#" class="hover:text-pink-500 transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-pink-500 transition-colors">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500 font-medium">
+            <p>© 2026 Ivelle. Made with ❤️ in India.</p>
+            <div class="flex items-center gap-3">
+                <span class="px-2 py-1 border rounded bg-gray-50 text-xs">UPI</span>
+                <span class="px-2 py-1 border rounded bg-gray-50 text-xs">Visa</span>
+                <span class="px-2 py-1 border rounded bg-gray-50 text-xs">Mastercard</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Javascript Logic -->
+    <script>
+        // Data updated for India (INR) & fresh reliable image URLs
+        const PRODUCTS = [
+            { id: 1, name: "Bubblegum Pop Co-ord", price: 2499, category: "Co-ord Sets", image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=800&auto=format&fit=crop", colors: ["#FFC0CB", "#FFFFFF"], sizes: ["S", "M", "L"], description: "Your new go-to for brunch in Bandra or a day out in Hauz Khas. This pastel pink matching set is giving major main character energy.", isNew: true, isBestSeller: true, rating: 4.8, reviews: 124 },
+            { id: 2, name: "Lavender Dream Halter", price: 1299, category: "Crop Tops", image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=800&auto=format&fit=crop", colors: ["#E6E6FA", "#000000"], sizes: ["XS", "S", "M", "L"], description: "A silky, backless halter top that screams Y2K vibes. Pair it with low-rise jeans or a mini skirt for the ultimate night-out fit.", isNew: true, isBestSeller: false, rating: 4.5, reviews: 89 },
+            { id: 3, name: "Matcha Run Oversized Tee", price: 1499, category: "Oversized Tees", image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop", colors: ["#F5F5DC", "#E6E6FA"], sizes: ["M", "L", "XL"], description: "Steal his hoodie? Nah, buy your own oversized tee. Perfect for airport fits or running for your daily iced matcha.", isNew: false, isBestSeller: true, rating: 4.9, reviews: 312 },
+            { id: 4, name: "Midnight Satin Slip", price: 2999, category: "Dresses", image: "https://images.unsplash.com/photo-1566206091558-4ec92740afd0?q=80&w=800&auto=format&fit=crop", colors: ["#000000", "#FFC0CB"], sizes: ["XS", "S", "M"], description: "Sleek, chic, and slightly dangerous. This cowl-neck slip dress hugs you in all the right places.", isNew: false, isBestSeller: true, rating: 4.7, reviews: 205 },
+            { id: 5, name: "Disco Ball Sequin Mini", price: 3499, category: "Party Wear", image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop", colors: ["#C0C0C0", "#FFD700"], sizes: ["S", "M", "L"], description: "Be the life of the party. Catch every light on the dance floor with this fully sequined statement piece.", isNew: true, isBestSeller: false, rating: 4.6, reviews: 45 },
+            { id: 6, name: "Cloud 9 Knit Co-ord", price: 2799, category: "Co-ord Sets", image: "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=800&auto=format&fit=crop", colors: ["#FFFFFF", "#E6E6FA"], sizes: ["XS", "S", "M", "L", "XL"], description: "So comfy you could sleep in it, so cute you'll want to wear it out. Flared pants and a matching cardigan.", isNew: false, isBestSeller: true, rating: 4.9, reviews: 410 },
+            { id: 7, name: "Butterfly Effect Crop", price: 999, category: "Crop Tops", image: "https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?q=80&w=800&auto=format&fit=crop", colors: ["#FFC0CB", "#87CEEB"], sizes: ["S", "M", "L"], description: "Graphic baby tee featuring an airbrushed butterfly design. 2000s nostalgia at its finest.", isNew: false, isBestSeller: false, rating: 4.3, reviews: 67 },
+            { id: 8, name: "Vintage Wash 'Tired' Tee", price: 1199, category: "Oversized Tees", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop", colors: ["#808080", "#000000"], sizes: ["L", "XL"], description: "Acid wash vintage feel with quirky typography. Because let's be real, we're all a little tired.", isNew: true, isBestSeller: false, rating: 4.8, reviews: 112 },
+            { id: 9, name: "Picnic Date Floral Midi", price: 2599, category: "Dresses", image: "https://images.unsplash.com/photo-1612336307429-8a898d10e223?q=80&w=800&auto=format&fit=crop", colors: ["#FFFFFF", "#FFC0CB"], sizes: ["S", "M", "L"], description: "Cottagecore dreams realized. Flowy skirt, corset-style bodice, and dainty floral print.", isNew: false, isBestSeller: true, rating: 4.9, reviews: 280 },
+            { id: 10, name: "Velvet Night Out Dress", price: 3299, category: "Party Wear", image: "https://images.unsplash.com/photo-1572804013309-82a89b43afed?q=80&w=800&auto=format&fit=crop", colors: ["#800080", "#000000"], sizes: ["XS", "S", "M"], description: "Crushed velvet mini dress with a dramatic side slit. Pair with knee-high boots and attitude.", isNew: true, isBestSeller: false, rating: 4.7, reviews: 55 },
+            { id: 11, name: "Sunday Errands Co-ord", price: 1999, category: "Co-ord Sets", image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800&auto=format&fit=crop", colors: ["#F5F5DC", "#808080"], sizes: ["S", "M", "L", "XL"], description: "Sweatpants but make it fashion. Cropped hoodie and high-waisted joggers for effortless cool.", isNew: false, isBestSeller: false, rating: 4.6, reviews: 142 },
+            { id: 12, name: "Checkmate Halter", price: 1099, category: "Crop Tops", image: "https://images.unsplash.com/photo-1504198458649-3128b932f49e?q=80&w=800&auto=format&fit=crop", colors: ["#000000", "#FFC0CB"], sizes: ["XS", "S", "M", "L"], description: "Playful checkerboard print knit top. Stretchy, comfortable, and highly photogenic.", isNew: true, isBestSeller: true, rating: 4.8, reviews: 198 }
+        ];
+
+        let cart = [];
+        let wishlist = [];
+        let selectedProduct = null;
+
+        // Utilities
+        function formatMoney(amount) {
+            return '₹' + amount.toLocaleString('en-IN');
+        }
+
+        // Navigation
+        function navigateTo(viewId, productId = null) {
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            // Update active nav links
+            document.querySelectorAll('.nav-link').forEach(el => {
+                if(el.dataset.target === viewId) {
+                    el.classList.add('text-pink-500');
+                    el.classList.remove('text-gray-800');
+                } else {
+                    el.classList.remove('text-pink-500');
+                    el.classList.add('text-gray-800');
+                }
+            });
+
+            if (viewId === 'product' && productId) {
+                selectedProduct = PRODUCTS.find(p => p.id === productId);
+                renderProductPage();
+            }
+
+            // Show selected view
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenu.classList.contains('open')) {
+                toggleMobileMenu();
+            }
+        }
+
+        // Render Grids
+        function createProductCardHTML(product) {
+            const isWished = wishlist.includes(product.id);
+            const wishIcon = isWished ? '<i class="ph-fill ph-heart text-pink-500 text-lg"></i>' : '<i class="ph ph-heart text-gray-900 text-lg"></i>';
+            const badges = `
+                ${product.isNew ? '<span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider w-fit mb-1">New</span>' : ''}
+                ${product.isBestSeller ? '<span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider w-fit">Hot</span>' : ''}
+            `;
+            const colorsHTML = product.colors.map(c => `<div class="w-4 h-4 rounded-full border border-gray-300" style="background-color: ${c}"></div>`).join('');
+
+            return `
+                <div class="group cursor-pointer flex flex-col" onclick="navigateTo('product', ${product.id})">
+                    <div class="relative aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 mb-4 isolate">
+                        <img src="${product.image}" alt="${product.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                        <div class="absolute top-3 left-3 flex flex-col z-10">${badges}</div>
+                        <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur rounded-full hover:bg-white transition-colors z-10 shadow-sm">
+                            ${wishIcon}
+                        </button>
+                        <div class="absolute bottom-0 left-0 w-full p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-10 bg-gradient-to-t from-black/50 to-transparent">
+                            <button onclick="event.stopPropagation(); addToCart(${product.id}, '${product.sizes[0]}', '${product.colors[0]}')" class="w-full bg-white text-black font-syne font-bold py-3 rounded-full hover:bg-pink-500 hover:text-white transition-colors text-sm">
+                                Quick Add +
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-syne font-semibold text-base md:text-lg line-clamp-1 pr-2">${product.name}</h3>
+                            <span class="font-medium text-gray-900 whitespace-nowrap">${formatMoney(product.price)}</span>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-3">${product.category}</p>
+                        <div class="mt-auto flex gap-1">${colorsHTML}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderGrids() {
+            // Shop View Grid
+            const shopGrid = document.getElementById('shop-grid');
+            shopGrid.innerHTML = PRODUCTS.map(p => createProductCardHTML(p)).join('');
+
+            // Home Trending Grid
+            const trendingGrid = document.getElementById('trending-grid');
+            const trendingProducts = PRODUCTS.filter(p => p.isBestSeller).slice(0, 4);
+            trendingGrid.innerHTML = trendingProducts.map(p => createProductCardHTML(p)).join('');
+        }
+
+        // Product Details Page
+        function renderProductPage() {
+            if (!selectedProduct) return;
+            const p = selectedProduct;
+            
+            document.getElementById('prod-bc-category').innerText = p.category;
+            document.getElementById('prod-main-img').src = p.image;
+            document.getElementById('prod-name').innerText = p.name;
+            document.getElementById('prod-price').innerText = formatMoney(p.price);
+            document.getElementById('prod-rating-text').innerText = `${p.rating} (${p.reviews})`;
+            document.getElementById('prod-desc').innerText = p.description;
+
+            // Badges
+            let badgesHTML = '';
+            if(p.isNew) badgesHTML += '<span class="bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-sm w-fit">New Arrival</span>';
+            document.getElementById('prod-badges').innerHTML = badgesHTML;
+
+            // Colors
+            document.getElementById('prod-colors').innerHTML = p.colors.map((c, i) => 
+                `<button class="w-10 h-10 rounded-full border-2 ${i===0 ? 'border-gray-900' : 'border-transparent shadow-sm'}" style="background-color: ${c}"></button>`
+            ).join('');
+
+            // Sizes
+            document.getElementById('prod-sizes').innerHTML = p.sizes.map((s, i) => 
+                `<button class="py-3 rounded-xl border text-sm font-medium transition-all ${i===0 ? 'border-black bg-black text-white' : 'border-gray-200 text-gray-900 hover:border-black'}">${s}</button>`
+            ).join('');
+
+            // Action Buttons
+            const btnAdd = document.getElementById('btn-add-cart');
+            btnAdd.onclick = () => addToCart(p.id, p.sizes[0], p.colors[0]);
+
+            const btnWishlist = document.getElementById('btn-wishlist-detail');
+            btnWishlist.onclick = () => {
+                toggleWishlist(p.id);
+                renderProductPage(); // Re-render to update icon
+            };
+            btnWishlist.innerHTML = wishlist.includes(p.id) ? '<i class="ph-fill ph-heart text-pink-500 text-2xl"></i>' : '<i class="ph ph-heart text-gray-900 text-2xl"></i>';
+        }
+
+        // Wishlist
+        function toggleWishlist(productId) {
+            if (wishlist.includes(productId)) {
+                wishlist = wishlist.filter(id => id !== productId);
+            } else {
+                wishlist.push(productId);
+            }
+            // Update badge
+            const badge = document.getElementById('wishlist-badge');
+            if(wishlist.length > 0) {
+                badge.innerText = wishlist.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            renderGrids(); // Re-render grids to update icons
+        }
+
+        // Cart Functions
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+            document.getElementById('cart-overlay').classList.toggle('open');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            menu.classList.toggle('open');
+            if(menu.classList.contains('open')) {
+                icon.classList.remove('ph-list');
+                icon.classList.add('ph-x');
+            } else {
+                icon.classList.remove('ph-x');
+                icon.classList.add('ph-list');
+            }
+        }
+
+        function addToCart(productId, size, color) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            const cartId = `${product.id}-${size}-${color}-${Date.now()}`;
+            cart.push({ ...product, cartId, selectedSize: size, selectedColor: color, quantity: 1 });
+            updateCartUI();
+            
+            // Open cart
+            document.getElementById('cart-sidebar').classList.add('open');
+            document.getElementById('cart-overlay').classList.add('open');
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            updateCartUI();
+        }
+
+        function updateQuantity(cartId, delta) {
+            const item = cart.find(i => i.cartId === cartId);
+            if(item) {
+                item.quantity = Math.max(1, item.quantity + delta);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const footer = document.getElementById('cart-footer');
+            const badge = document.getElementById('cart-badge');
+            
+            // Badge
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if(totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 flex flex-col items-center">
+                        <div class="w-20 h-20 bg-pink-50 rounded-full flex items-center justify-center mb-4">
+                            <i class="ph ph-shopping-bag text-pink-300 text-4xl"></i>
+                        </div>
+                        <p class="text-gray-500 font-medium mb-4">Your bag is looking a little empty.</p>
+                        <button onclick="toggleCart(); navigateTo('shop')" class="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-pink-500 transition-colors w-full">
+                            Start Shopping
+                        </button>
+                    </div>
+                `;
+                footer.classList.add('hidden');
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex gap-4">
+                        <div class="w-24 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" />
+                        </div>
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-syne font-semibold text-sm line-clamp-2 pr-4">${item.name}</h3>
+                                    <button onclick="removeFromCart('${item.cartId}')" class="text-gray-400 hover:text-red-500">
+                                        <i class="ph ph-x"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-500 text-xs mt-1 flex items-center">
+                                    Size: ${item.selectedSize} | Color: 
+                                    <span class="inline-block w-3 h-3 rounded-full border border-gray-200 ml-1" style="background-color: ${item.selectedColor}"></span>
+                                </p>
+                                <p class="font-medium mt-2">${formatMoney(item.price)}</p>
+                            </div>
+                            <div class="flex items-center border border-gray-200 rounded-full w-fit">
+                                <button onclick="updateQuantity('${item.cartId}', -1)" class="px-3 py-1 text-gray-500 hover:text-black"><i class="ph ph-minus"></i></button>
+                                <span class="px-2 text-sm font-medium w-6 text-center">${item.quantity}</span>
+                                <button onclick="updateQuantity('${item.cartId}', 1)" class="px-3 py-1 text-gray-500 hover:text-black"><i class="ph ph-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                document.getElementById('cart-total').innerText = formatMoney(totalAmount);
+                footer.classList.remove('hidden');
+            }
+        }
+
+        // Initialize App
+        window.onload = () => {
+            renderGrids();
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
+
